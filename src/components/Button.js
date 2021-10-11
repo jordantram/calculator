@@ -1,10 +1,10 @@
 import React from 'react';
 import './Button.css';
 
-const Button = ({ handleClick, label, value }) => {
+const Button = ({ handleClick, button }) => {
   return (
-    <button className='calc-button' onClick={() => {handleClick(value)}}>
-      {label}
+    <button className='calc-button' onClick={() => {handleClick(button.formula)}}>
+      {button.label}
     </button>
   );
 }
