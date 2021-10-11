@@ -1,9 +1,10 @@
 import React from 'react';
+import './Display.css'
 
-const Display = () => {
+const Display = ({ input }) => {
   return (
-    <div>
-      Display
+    <div className='calc-display'>
+      {input}
     </div>
   );
 }

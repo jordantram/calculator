@@ -1,0 +1,10 @@
+.keypad-wrapper {
+  justify-content: center;
+  align-items: center;
+}
+
+.keypad-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

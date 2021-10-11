@@ -1,0 +1,8 @@
+.calc-display {
+  height: 2.5em;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: grey;
+  font-size: 2em;
+}

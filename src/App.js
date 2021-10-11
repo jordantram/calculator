@@ -6,8 +6,10 @@ import './App.css';
 const App = () => {
   return (
     <div className="App">
-      <Display />
-      <Keypad />
+      <div className="calc-wrapper">
+        <Display input={"Hello"}/>
+        <Keypad />
+      </div>
     </div>
   );
 }
