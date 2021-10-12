@@ -42,21 +42,21 @@ const calculatorButtons = [
     displaySymbol: '√'
   },
   {
-    operation: '7',
+    operation: 'seven',
     type: 'operand',
     label: '7',
     formula: '7',
     displaySymbol: '7'
   },
   {
-    operation: '8',
+    operation: 'eight',
     type: 'operand',
     label: '8',
     formula: '8',
     displaySymbol: '8'
   },
   {
-    operation: '9',
+    operation: 'nine',
     type: 'operand',
     label: '9',
     formula: '9',
@@ -77,21 +77,21 @@ const calculatorButtons = [
     displaySymbol: '^2'
   },
   {
-    operation: '4',
+    operation: 'four',
     type: 'operand',
     label: '4',
     formula: '4',
     displaySymbol: '4'
   },
   {
-    operation: '5',
+    operation: 'five',
     type: 'operand',
     label: '5',
     formula: '5',
     displaySymbol: '5'
   },
   {
-    operation: '6',
+    operation: 'six',
     type: 'operand',
     label: '6',
     formula: '6',
@@ -112,21 +112,21 @@ const calculatorButtons = [
     displaySymbol: '^'
   },
   {
-    operation: '1',
+    operation: 'one',
     type: 'operand',
     label: '1',
     formula: '1',
     displaySymbol: '1'
   },
   {
-    operation: '2',
+    operation: 'two',
     type: 'operand',
     label: '2',
     formula: '2',
     displaySymbol: '2'
   },
   {
-    operation: '3',
+    operation: 'three',
     type: 'operand',
     label: '3',
     formula: '3',
@@ -154,7 +154,7 @@ const calculatorButtons = [
     displaySymbol: '.'
   },
   {
-    operation: '0',
+    operation: 'zero',
     type: 'operand',
     label: '0',
     formula: '0',
