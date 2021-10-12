@@ -3,7 +3,7 @@ import './Button.css';
 
 const Button = ({ handleClick, button }) => {
   return (
-    <button className='calc-button' onClick={() => {handleClick(button)}}>
+    <button className={`calc-button ${button.type}`} onClick={() => {handleClick(button)}}>
       {button.label}
     </button>
   );

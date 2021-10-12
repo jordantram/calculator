@@ -1,12 +1,20 @@
 .calc-button {
   background: #e2e2e2;
-  border: 1px solid rgba(0,0,0,0.05);
+  border: 1px solid rgba(0, 0, 0, 0.15);
   align-items: center;
   justify-content: center;
   width: 4em;
   font-size: 1.5em;
   color: rgba(0, 0, 0, 0.5);
   height: 3em;
+}
+
+.operator, .clear, .function, .open-parenthesis, .close-parenthesis {
+  background-color: orange;
+}
+
+.equals, .WTI {
+  background-color: rgb(100, 100, 255);
 }
 
 .calc-button:hover {
