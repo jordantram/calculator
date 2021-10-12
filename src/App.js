@@ -23,16 +23,22 @@ const App = () => {
       const lastItem = result[result.length - 1];
       const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
 
-      if (lastItemType === 'operator' || lastItemType === 'open-parenthesis') {
+      if (result.join('') === '0' || justEvaluated) {
+        setInputDisplay([button.displaySymbol]);
+        setResult([button.formula]);
+        setOpenParentheses(openParentheses + 1);
+        setJustEvaluated(false);
+      } else if (lastItemType === 'operator' || lastItemType === 'open-parenthesis') {
         setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
         setResult(prevArray => ([...prevArray, button.formula]));
         setOpenParentheses(openParentheses + 1);
+        setJustEvaluated(false);
       }
     } else if (button.type === 'close-parenthesis') {
       const lastItem = result[result.length - 1];
       const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
 
-      if (lastItemType === 'operand' || lastItemType === 'close-parenthesis') {
+      if ((lastItemType === 'operand' || lastItemType === 'close-parenthesis') && closeParentheses < openParentheses) {
         setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
         setResult(prevArray => ([...prevArray, button.formula]));
         setCloseParentheses(closeParentheses + 1);
@@ -57,7 +63,7 @@ const App = () => {
       const lastItem = result[result.length - 1];
       const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
 
-      if (lastItemType === 'operand') {
+      if (lastItemType === 'operand' || lastItemType === 'close-parenthesis') {
         if (button.operation === 'exponent') {
           setInputDisplay(prevArray => ([...prevArray, button.displaySymbol, '(']));
           setResult(prevArray => ([...prevArray, button.formula, '(']));
