@@ -15,14 +15,14 @@ const calculatorButtons = [
   },
   {
     operation: 'open-parenthesis',
-    type: 'operand',
+    type: 'open-parenthesis',
     label: '(',
     formula: '(',
     displaySymbol: '('
   },
   {
     operation: 'close-parenthesis',
-    type: 'operand',
+    type: 'close-parenthesis',
     label: ')',
     formula: ')',
     displaySymbol: ')'

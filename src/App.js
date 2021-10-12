@@ -10,6 +10,7 @@ const App = () => {
   const [justEvaluated, setJustEvaluated] = useState(false);
   const [openParentheses, setOpenParentheses] = useState(0);
   const [closeParentheses, setCloseParentheses] = useState(0);
+  const [decimalAllowed, setDecimalAllowed] = useState(true);
 
   const handleClick = (button) => {
     if (button.type === 'clear') {
@@ -17,19 +18,38 @@ const App = () => {
       setResult(['0']);
       setOpenParentheses(0);
       setCloseParentheses(0);
+      setDecimalAllowed(true);
+    } else if (button.type === 'open-parenthesis') {
+      const lastItem = result[result.length - 1];
+      const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
+
+      if (lastItemType === 'operator' || lastItemType === 'open-parenthesis') {
+        setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
+        setResult(prevArray => ([...prevArray, button.formula]));
+        setOpenParentheses(openParentheses + 1);
+      }
+    } else if (button.type === 'close-parenthesis') {
+      const lastItem = result[result.length - 1];
+      const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
+
+      if (lastItemType === 'operand' || lastItemType === 'close-parenthesis') {
+        setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
+        setResult(prevArray => ([...prevArray, button.formula]));
+        setCloseParentheses(closeParentheses + 1);
+      }
     } else if (button.type === 'operand') {
       if ((result.join('') === '0' || justEvaluated) && button.operation !== 'decimal') {
         setInputDisplay([button.displaySymbol]);
         setResult([button.formula]);
+      } else if (button.operation === 'decimal') {
+        if (decimalAllowed) {
+          setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
+          setResult(prevArray => ([...prevArray, button.formula]));
+          setDecimalAllowed(false);
+        }
       } else {
         setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
         setResult(prevArray => ([...prevArray, button.formula]));
-      }
-
-      if (button.operation === 'open-parenthesis') {
-        setOpenParentheses(openParentheses + 1);
-      } else if (button.operation === 'close-parenthesis') {
-        setCloseParentheses(closeParentheses + 1);
       }
 
       setJustEvaluated(false);
@@ -51,6 +71,7 @@ const App = () => {
         }
 
         setJustEvaluated(false);
+        setDecimalAllowed(true);
       }
     } else if (button.type === 'function') {
       if (result.join('') === '0' || justEvaluated) {
@@ -62,7 +83,7 @@ const App = () => {
         const lastItem = result[result.length - 1];
         const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
 
-        if (lastItemType === 'operator') {
+        if (lastItemType === 'operator' || lastItemType === 'open-parenthesis') {
           setInputDisplay(prevArray => ([...prevArray, button.displaySymbol, '(']));
           setResult(prevArray => ([...prevArray, button.formula, '(']));
           setOpenParentheses(openParentheses + 1);
@@ -73,7 +94,7 @@ const App = () => {
       const lastItem = result[result.length - 1];
       const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
 
-      if (lastItemType === 'operand' && openParentheses === closeParentheses) {
+      if ((lastItemType === 'operand' || lastItemType === 'close-parenthesis') && openParentheses === closeParentheses) {
         const answer = eval(result.join('')).toString();
         const answerAsArray = [...answer];
         setInputDisplay(answerAsArray);
@@ -81,6 +102,7 @@ const App = () => {
         setJustEvaluated(true);
         setOpenParentheses(0);
         setCloseParentheses(0);
+        setDecimalAllowed(true);
       }
     }
   };
