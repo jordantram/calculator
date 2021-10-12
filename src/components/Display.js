@@ -4,7 +4,7 @@ import './Display.css'
 const Display = ({ input }) => {
   return (
     <div className='calc-display'>
-      {input}
+      {input.join('')}
     </div>
   );
 }
