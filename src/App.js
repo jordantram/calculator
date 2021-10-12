@@ -11,59 +11,72 @@ const App = () => {
   const [openParentheses, setOpenParentheses] = useState(0);
   const [closeParentheses, setCloseParentheses] = useState(0);
   const [decimalAllowed, setDecimalAllowed] = useState(true);
+  const [currentOperand, setCurrentOperand] = useState('');
 
   const handleClick = (button) => {
+    const lastItem = result[result.length - 1];
+    const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
+    const lastItemOperation = calculatorButtons.find(item => item.formula === lastItem).operation;
+
     if (button.type === 'clear') {
       setInputDisplay(['0']);
       setResult(['0']);
       setOpenParentheses(0);
       setCloseParentheses(0);
       setDecimalAllowed(true);
+      setCurrentOperand('');
     } else if (button.type === 'open-parenthesis') {
-      const lastItem = result[result.length - 1];
-      const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
-
       if (result.join('') === '0' || justEvaluated) {
         setInputDisplay([button.displaySymbol]);
         setResult([button.formula]);
         setOpenParentheses(openParentheses + 1);
         setJustEvaluated(false);
+        setCurrentOperand('');
       } else if (lastItemType === 'operator' || lastItemType === 'open-parenthesis') {
         setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
         setResult(prevArray => ([...prevArray, button.formula]));
         setOpenParentheses(openParentheses + 1);
         setJustEvaluated(false);
+        setCurrentOperand('');
       }
     } else if (button.type === 'close-parenthesis') {
-      const lastItem = result[result.length - 1];
-      const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
-
-      if ((lastItemType === 'operand' || lastItemType === 'close-parenthesis') && closeParentheses < openParentheses) {
+      if (((lastItemType === 'operand' && lastItemOperation !== 'decimal') 
+        || lastItemType === 'close-parenthesis') && closeParentheses < openParentheses) {
         setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
         setResult(prevArray => ([...prevArray, button.formula]));
         setCloseParentheses(closeParentheses + 1);
+        setCurrentOperand('');
       }
     } else if (button.type === 'operand') {
-      if ((result.join('') === '0' || justEvaluated) && button.operation !== 'decimal') {
-        setInputDisplay([button.displaySymbol]);
-        setResult([button.formula]);
-      } else if (button.operation === 'decimal') {
-        if (decimalAllowed) {
-          setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
-          setResult(prevArray => ([...prevArray, button.formula]));
-          setDecimalAllowed(false);
+      if (lastItemType !== 'close-parenthesis') {
+        if ((result.join('') === '0' || justEvaluated) && button.operation !== 'decimal') {
+          setInputDisplay([button.displaySymbol]);
+          setResult([button.formula]);
+          setCurrentOperand(button.formula);
+        } else if (button.operation === 'decimal') {
+          if (decimalAllowed) {
+            setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
+            setResult(prevArray => ([...prevArray, button.formula]));
+            setDecimalAllowed(false);
+            setCurrentOperand(currentOperand + '.');
+          }
+        } else {
+          if (currentOperand === '0') {
+            setInputDisplay(prevArray => ([...prevArray.slice(0, prevArray.length - 1), button.displaySymbol]));
+            setResult(prevArray => ([...prevArray.slice(0, prevArray.length - 1), button.formula]));
+            setCurrentOperand(button.formula);
+          } else {
+            setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
+            setResult(prevArray => ([...prevArray, button.formula]));
+            setCurrentOperand(currentOperand + button.formula);
+          }
         }
-      } else {
-        setInputDisplay(prevArray => ([...prevArray, button.displaySymbol]));
-        setResult(prevArray => ([...prevArray, button.formula]));
+
+        setJustEvaluated(false);
       }
-
-      setJustEvaluated(false);
     } else if (button.type === 'operator') {
-      const lastItem = result[result.length - 1];
-      const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
-
-      if (lastItemType === 'operand' || lastItemType === 'close-parenthesis') {
+      if ((lastItemType === 'operand' && lastItemOperation !== 'decimal')
+         || lastItemType === 'close-parenthesis') {
         if (button.operation === 'exponent') {
           setInputDisplay(prevArray => ([...prevArray, button.displaySymbol, '(']));
           setResult(prevArray => ([...prevArray, button.formula, '(']));
@@ -78,6 +91,7 @@ const App = () => {
 
         setJustEvaluated(false);
         setDecimalAllowed(true);
+        setCurrentOperand('');
       }
     } else if (button.type === 'function') {
       if (result.join('') === '0' || justEvaluated) {
@@ -85,21 +99,17 @@ const App = () => {
         setResult([button.formula, '(']);
         setOpenParentheses(openParentheses + 1);
         setJustEvaluated(false);
+        setCurrentOperand('');
       } else {
-        const lastItem = result[result.length - 1];
-        const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
-
         if (lastItemType === 'operator' || lastItemType === 'open-parenthesis') {
           setInputDisplay(prevArray => ([...prevArray, button.displaySymbol, '(']));
           setResult(prevArray => ([...prevArray, button.formula, '(']));
           setOpenParentheses(openParentheses + 1);
           setJustEvaluated(false);
+          setCurrentOperand('');
         }
       }
     } else if (button.type === 'equals') {
-      const lastItem = result[result.length - 1];
-      const lastItemType = calculatorButtons.find(item => item.formula === lastItem).type;
-
       if ((lastItemType === 'operand' || lastItemType === 'close-parenthesis') && openParentheses === closeParentheses) {
         const answer = eval(result.join('')).toString();
         const answerAsArray = [...answer];
@@ -109,6 +119,7 @@ const App = () => {
         setOpenParentheses(0);
         setCloseParentheses(0);
         setDecimalAllowed(true);
+        setCurrentOperand('');
       }
     }
   };

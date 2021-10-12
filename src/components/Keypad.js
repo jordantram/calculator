@@ -11,7 +11,7 @@ const Keypad = ({ handleClick }) => {
     items.push(
       <div className='keypad-row' key={i}>
         {calculatorButtons.slice(i * buttonsPerRow, (i+1) * buttonsPerRow).map((button, index) => {
-          return <Button handleClick={handleClick} button={button} key={index}/>
+          return <Button className={button.operation} handleClick={handleClick} button={button} key={index}/>
         })}
       </div>
     );
